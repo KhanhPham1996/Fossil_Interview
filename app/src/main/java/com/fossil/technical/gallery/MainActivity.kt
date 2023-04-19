@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                mainViewModel.loadImage(this)
+                mainViewModel.loadImageFromDevice(this)
             } else {
                 mainViewModel.permissionDenied()
 
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 if(shouldShowGalleryPermissionRationale()==false){
                     requestGalleryPermission(){isPermissionGranted ->
                         if(isPermissionGranted){
-                            mainViewModel.loadImage(this)
+                            mainViewModel.loadImageFromDevice(this)
                         }
                         else {
                             requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)

@@ -2,6 +2,7 @@ package com.fossil.technical.gallery.extention
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityCompat
 
@@ -13,7 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-inline fun FragmentActivity.requestGalleryPermission( crossinline isPermissionGranted: (Boolean) -> Unit) {
+ fun FragmentActivity.requestGalleryPermission(  isPermissionGranted: (Boolean) -> Unit) {
 
     if (ContextCompat.checkSelfPermission(
             this,
@@ -27,10 +28,17 @@ inline fun FragmentActivity.requestGalleryPermission( crossinline isPermissionGr
     }
 }
 fun FragmentActivity.shouldShowGalleryPermissionRationale(): Boolean {
-    return ActivityCompat.shouldShowRequestPermissionRationale(
-        this,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
+    return    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.READ_MEDIA_IMAGES)
+    }
+    else{
+        ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.READ_EXTERNAL_STORAGE)
+
+    }
 }
 
 inline  fun <T , S : Flow<T>> FragmentActivity.bindTo(flow: S, crossinline  action: (T) -> Unit) {

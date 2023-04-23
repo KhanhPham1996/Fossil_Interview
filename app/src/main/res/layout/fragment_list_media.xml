@@ -7,8 +7,18 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:layout_marginTop="10dp"
+            android:id="@+id/spinner"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </androidx.appcompat.widget.AppCompatSpinner>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginBottom="15dp"
             android:id="@+id/recyclerImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -16,7 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner"
             tools:itemCount="3"
             tools:listitem="@layout/item_image_in_device" />
 

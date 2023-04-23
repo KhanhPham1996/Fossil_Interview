@@ -18,20 +18,38 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
  fun Fragment.requestGalleryPermission(  isPermissionGranted: (Boolean) -> Unit) {
+     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+         if (ContextCompat.checkSelfPermission(
+                 requireContext(),
+                 Manifest.permission.READ_MEDIA_IMAGES
+             ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                 requireContext(),
+                 Manifest.permission.READ_MEDIA_VIDEO
+             ) == PackageManager.PERMISSION_GRANTED
+         ) {
+             isPermissionGranted.invoke(true)
+         } else {
+             // Permission not yet granted, request it using the ActivityResultLauncher
+             isPermissionGranted.invoke(false)
+         }
+     }
+     else{
+         if (ContextCompat.checkSelfPermission(
+                 requireContext(),
+                 Manifest.permission.READ_EXTERNAL_STORAGE
+             ) == PackageManager.PERMISSION_GRANTED
+         ) {
+             isPermissionGranted.invoke(true)
+         } else {
+             // Permission not yet granted, request it using the ActivityResultLauncher
+             isPermissionGranted.invoke(false)
+         }
+     }
 
-    if (ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        isPermissionGranted.invoke(true)
-    } else {
-        // Permission not yet granted, request it using the ActivityResultLauncher
-        isPermissionGranted.invoke(false)
-    }
+
 }
 fun Fragment.shouldShowGalleryPermissionRationale(): Boolean {
-    return    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         ActivityCompat.shouldShowRequestPermissionRationale(
             requireActivity(),
             Manifest.permission.READ_MEDIA_IMAGES)

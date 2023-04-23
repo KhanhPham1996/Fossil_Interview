@@ -13,8 +13,8 @@ interface MediaFileFavoriteDao {
     @Update
     fun updateMediaFile(user: MediaFile)
 
-    @Query("SELECT * FROM $TABLE_NAME LIMIT :limit OFFSET :offset")
-    fun getMediaFile(limit: Int = DEFAULT_LIMIT_PAGINATION, offset: Int): List<MediaFile>
+    @Query("SELECT * FROM $TABLE_NAME ")
+   suspend fun getMediaFile(): List<MediaFile>
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -24,7 +24,10 @@ interface MediaFileFavoriteDao {
     fun deleteAllData()
 
     @Query("DELETE FROM $TABLE_NAME   WHERE `id`= :id")
-    fun deleteFavorite(id: Int)
+    fun deleteFavorite(id: Long)
+
+    @Query("SELECT EXISTS(SELECT 1 FROM  $TABLE_NAME WHERE `id` = :id)")
+    fun exists(id: Long): Boolean
 
     companion object{
         const val DEFAULT_LIMIT_PAGINATION = 10

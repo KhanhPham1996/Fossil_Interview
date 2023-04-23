@@ -1,11 +1,17 @@
 package com.fossil.technical.gallery.viewmodel
 
 import com.fossil.technical.gallery.model.MediaFile
+import com.fossil.technical.gallery.repository.GalleryRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
 
-class MediaDetailViewModel : BaseViewModel() {
+@HiltViewModel
+class MediaDetailViewModel @Inject constructor(
+    private val galleryRepository: GalleryRepository
+) : BaseViewModel() {
 
 
     private val _state = MutableStateFlow<ViewState>(ViewState.DoneLoading)
@@ -21,9 +27,23 @@ class MediaDetailViewModel : BaseViewModel() {
     fun showMediaToUI(mediaFile: MediaFile) {
         execute {
             _event.send(ViewEvent.ShowMediaFile(mediaFile))
+            _event.send(ViewEvent.ShouldMarkAsFavorite(galleryRepository.isExistInFavorite(mediaFile)))
+
+
         }
     }
 
+    fun addToFavorite(mediaFile: MediaFile) {
+        execute {
+            galleryRepository.addMediaFileToFavorite(mediaFile)
+        }
+    }
+
+    fun removeFromFavorite(mediaFile: MediaFile) {
+        execute {
+            galleryRepository.removeMediaFileFromFavorite(mediaFile)
+        }
+    }
 
 
     sealed class ViewState {
@@ -34,7 +54,7 @@ class MediaDetailViewModel : BaseViewModel() {
 
     sealed class ViewEvent {
         class ShowMediaFile(val mediaFile: MediaFile) : ViewEvent()
-        object SaveOrDeleteFavorite : ViewEvent()
+        class ShouldMarkAsFavorite(val shouldMarkAsFavorite: Boolean) : ViewEvent()
     }
 
 }

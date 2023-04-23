@@ -29,17 +29,18 @@
             <VideoView
                 android:id="@+id/videoView"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1:1"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
             </VideoView>
             <CheckBox
+                android:id="@+id/cb_favorite"
                 android:background="@android:color/transparent"
                 android:button="@drawable/favorite_selector"
                 android:buttonTint="#FFE800"

@@ -8,7 +8,9 @@ import androidx.databinding.DataBindingUtil
 import com.fossil.technical.gallery.databinding.ActivityMainBinding
 import com.fossil.technical.gallery.extention.*
 import com.fossil.technical.gallery.fragment.MediaListFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 

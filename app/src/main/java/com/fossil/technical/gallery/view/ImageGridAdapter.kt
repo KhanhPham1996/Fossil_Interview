@@ -5,30 +5,35 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.fossil.technical.gallery.R
 import com.fossil.technical.gallery.databinding.ItemImageInDeviceBinding
 import com.fossil.technical.gallery.extention.gone
 import com.fossil.technical.gallery.extention.loadImageByURI
+import com.fossil.technical.gallery.extention.singleClick
 import com.fossil.technical.gallery.extention.visible
 import com.fossil.technical.gallery.model.MediaFile
 import com.fossil.technical.gallery.model.MediaFile.Companion.MEDIA_TYPE.VIDEO_TYPE
 
-class ImageGridAdapter  : ListAdapter<MediaFile, ImageGridAdapter.ImageGridViewHolder>(ItemImageDiffCallBack()) {
+class ImageGridAdapter() :
+    ListAdapter<MediaFile, ImageGridAdapter.ImageGridViewHolder>(ItemImageDiffCallBack()) {
+    private var onItemClick: ((mediaFile: MediaFile) -> Unit)? = null
 
+     fun setOnItemClickListener(onItemClick: (mediaFile: MediaFile) -> Unit) {
+        this.onItemClick = onItemClick
+    }
 
     class ImageGridViewHolder(
-        val binding : ItemImageInDeviceBinding
-    ) : ViewHolder(binding.root){
+        val binding: ItemImageInDeviceBinding
+    ) : ViewHolder(binding.root) {
 
-        fun bind(dataItem : MediaFile){
-            binding.imageInDevice.loadImageByURI(dataItem.imageUri)
-            if(dataItem.mediaType == VIDEO_TYPE){
+        fun bind(dataItem: MediaFile, onItemClick: ((mediaFile: MediaFile) -> Unit)?) {
+            binding.imageInDevice.loadImageByURI(dataItem.fileURI)
+            if (dataItem.mediaType == VIDEO_TYPE) {
                 binding.icPlay.visible()
-            }
-            else{
+            } else {
                 binding.icPlay.gone()
+            }
+            binding.root.singleClick{
+                onItemClick?.invoke(dataItem)
             }
         }
 
@@ -49,6 +54,7 @@ class ImageGridAdapter  : ListAdapter<MediaFile, ImageGridAdapter.ImageGridViewH
     override fun getItemCount(): Int {
         return super.getItemCount()
     }
+
     class ItemImageDiffCallBack() : DiffUtil.ItemCallback<MediaFile>() {
         override fun areItemsTheSame(oldItem: MediaFile, newItem: MediaFile): Boolean {
             return oldItem.id == newItem.id
@@ -70,7 +76,7 @@ class ImageGridAdapter  : ListAdapter<MediaFile, ImageGridAdapter.ImageGridViewH
     override fun onBindViewHolder(holder: ImageGridViewHolder, position: Int) {
         getItem(position)?.let {
 
-            holder.bind(it)
+            holder.bind(it, onItemClick)
         }
     }
 }

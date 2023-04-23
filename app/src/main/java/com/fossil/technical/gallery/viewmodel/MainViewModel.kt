@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import com.fossil.technical.gallery.model.MediaFile
 import com.fossil.technical.gallery.model.MediaFile.Companion.MEDIA_TYPE.IMAGE_TYPE
-import com.fossil.technical.gallery.model.MediaFile.Companion.MEDIA_TYPE.UNKNOW
+import com.fossil.technical.gallery.model.MediaFile.Companion.MEDIA_TYPE.UN_KNOW
 import com.fossil.technical.gallery.model.MediaFile.Companion.MEDIA_TYPE.VIDEO_TYPE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -95,12 +95,12 @@ class MainViewModel : BaseViewModel() {
                         name = name,
                         path = path,
                         dateCreated = dateCreated,
-                        imageUri = imageUri,
+                        fileURI = imageUri,
                         mediaType = when (mediaType) {
                             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> IMAGE_TYPE
                             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> VIDEO_TYPE
                             else -> {
-                                UNKNOW
+                                UN_KNOW
                             }
 
                         }

@@ -16,35 +16,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
-        initView()
-        handleOnBackPress()
-
-    }
-
-    private fun handleOnBackPress() {
-        this.onBackPressedDispatcher
-            .addCallback(this, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    isEnabled = true
-                    if(supportFragmentManager.backStackEntryCount<=1){
-                        finish()
-                    }
-                    else{
-                        supportFragmentManager.popBackStack()
-                    }
-
-                }
-            }
+        if (savedInstanceState == null) {
+            replaceFragmentWithNoTransition(
+                R.id.fragment_container,
+                MediaListFragment.newInstance(),
+                MediaListFragment.TAG
             )
+        }
+
     }
 
-    private fun initView() {
-        replaceFragmentWithNoTransition(
-            R.id.fragment_container,
-            MediaListFragment.newInstance(),
-            MediaListFragment.TAG
-        )
-    }
+
+
 
 
 }

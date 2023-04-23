@@ -22,7 +22,7 @@ class ImageGridAdapter() :
     }
 
     class ImageGridViewHolder(
-        val binding: ItemImageInDeviceBinding
+        private val binding: ItemImageInDeviceBinding
     ) : ViewHolder(binding.root) {
 
         fun bind(dataItem: MediaFile, onItemClick: ((mediaFile: MediaFile) -> Unit)?) {

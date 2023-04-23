@@ -4,13 +4,9 @@ import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.fossil.technical.gallery.R
@@ -20,7 +16,7 @@ import com.fossil.technical.gallery.extention.replaceFragmentWithTransition
 import com.fossil.technical.gallery.extention.requestGalleryPermission
 import com.fossil.technical.gallery.extention.shouldShowGalleryPermissionRationale
 import com.fossil.technical.gallery.view.ImageGridAdapter
-import com.fossil.technical.gallery.viewmodel.MainViewModel
+import com.fossil.technical.gallery.viewmodel.ListMediaViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,13 +35,13 @@ class MediaListFragment : BaseFragment<FragmentListMediaBinding>() {
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                mainViewModel.loadImageFromDevice(requireContext())
+                listMediaViewModel.loadImageFromDevice(requireContext())
             } else {
-                mainViewModel.permissionDenied()
+                listMediaViewModel.permissionDenied()
 
             }
         }
-    private val mainViewModel: MainViewModel by viewModels()
+    private val listMediaViewModel: ListMediaViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,11 +90,11 @@ class MediaListFragment : BaseFragment<FragmentListMediaBinding>() {
     }
 
     private fun requestStorageAndGetImage() {
-        mainViewModel.requestStoragePermission()
+        listMediaViewModel.requestStoragePermission()
     }
 
     private fun collectDataFromViewModel() {
-        with(mainViewModel) {
+        with(listMediaViewModel) {
             bindTo(this.state, ::bindViewStateChange)
             bindTo(this.event, ::bindViewEvent)
         }
@@ -106,25 +102,25 @@ class MediaListFragment : BaseFragment<FragmentListMediaBinding>() {
 
     }
 
-    private fun bindViewStateChange(stateData: MainViewModel.ViewState) {
+    private fun bindViewStateChange(stateData: ListMediaViewModel.ViewState) {
         when (stateData) {
-            is MainViewModel.ViewState.DoneLoading -> {
+            is ListMediaViewModel.ViewState.DoneLoading -> {
 
             }
-            is MainViewModel.ViewState.Loading -> {
+            is ListMediaViewModel.ViewState.Loading -> {
 
             }
         }
     }
 
 
-    private fun bindViewEvent(eventData: MainViewModel.ViewEvent) {
+    private fun bindViewEvent(eventData: ListMediaViewModel.ViewEvent) {
         when (eventData) {
-            is MainViewModel.ViewEvent.RequestPermission -> {
+            is ListMediaViewModel.ViewEvent.RequestPermission -> {
                 if (!shouldShowGalleryPermissionRationale()) {
                     requestGalleryPermission { isPermissionGranted ->
                         if (isPermissionGranted) {
-                            mainViewModel.loadImageFromDevice(requireContext())
+                            listMediaViewModel.loadImageFromDevice(requireContext())
                         } else {
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -144,10 +140,10 @@ class MediaListFragment : BaseFragment<FragmentListMediaBinding>() {
                     ).show()
                 }
             }
-            is MainViewModel.ViewEvent.ShowImage -> {
+            is ListMediaViewModel.ViewEvent.ShowImage -> {
                 imageGridAdapter.submitList(eventData.listMediaFile)
             }
-            is MainViewModel.ViewEvent.GetImage -> {
+            is ListMediaViewModel.ViewEvent.GetImage -> {
 
             }
         }

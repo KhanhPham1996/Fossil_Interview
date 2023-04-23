@@ -18,19 +18,19 @@ data class MediaFile(
     @ColumnInfo(name = "id")
     val id: Long,
 
-    @ColumnInfo(name = "price")
+    @ColumnInfo(name = "name")
     val name: String,
 
-    @ColumnInfo(name = "price")
+    @ColumnInfo(name = "path")
     val path: String,
 
-    @ColumnInfo(name = "price")
+    @ColumnInfo(name = "dateCreated")
     val dateCreated: String,
 
-    @ColumnInfo(name = "price")
+    @ColumnInfo(name = "fileURI")
     val fileURI: Uri,
 
-    @ColumnInfo(name = "price")
+    @ColumnInfo(name = "mediaType")
     val mediaType: Int,
 ): Parcelable {
     companion object{

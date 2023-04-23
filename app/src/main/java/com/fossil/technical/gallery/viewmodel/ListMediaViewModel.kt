@@ -15,7 +15,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
 
-class MainViewModel : BaseViewModel() {
+class ListMediaViewModel : BaseViewModel() {
 
 
     private val _state = MutableStateFlow<ViewState>(ViewState.DoneLoading)
